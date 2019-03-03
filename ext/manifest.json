@@ -1,0 +1,16 @@
+{
+ "manifest_version": 2,
+ "name": "Terminal?",
+ "description": "Render pages as terminal like fashion",
+ "version": "1",
+ "author": "Jaeseung Ha",
+"page_action": {
+   "default_icon": "tab-icon.png",
+   "default_title": "Terminal?"
+ },
+ "background": {
+         "scripts": ["background.js"],
+             "persistent": false
+               },
+ "permissions": ["activeTab"]
+}
