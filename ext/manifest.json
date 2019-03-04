@@ -4,13 +4,27 @@
  "description": "Render pages as terminal like fashion",
  "version": "1",
  "author": "Jaeseung Ha",
-"page_action": {
+"browser_action": {
    "default_icon": "tab-icon.png",
    "default_title": "Terminal?"
  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_end",
+      "all_frames": true
+    }
+  ],
  "background": {
-         "scripts": ["background.js"],
-             "persistent": false
-               },
- "permissions": ["activeTab"]
+  "scripts": ["background.js"],
+  "persistent": false
+ },
+"permissions": [
+"activeTab"
+]
 }
