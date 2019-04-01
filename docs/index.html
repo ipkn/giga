@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title> - Giga editor</title>
+
+	<link rel="shortcut icon" href="styles/images/favicon.jpg">
+	<link rel="icon" href="styles/images/favicon.jpg">
+
+	<link rel="stylesheet" href="styles/css/index.css">
+	<link rel="stylesheet" href="styles/css/fontawesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="styles/css/syntax.css">
+	
+	<meta name="keywords" content="Giga editor, a terminal based text editor consuming GBs of memory">
+	<meta name="description" content="a terminal based text editor consuming GBs of memory">
+
+	<script src="styles/js/jquery.min.js"></script>
+	<!--[if lt IE 9]>
+    	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  	<![endif]-->
+  	<style type="text/css">
+	  	.docs-content{
+	  		margin-bottom: 10px;
+	  	}
+  	</style>
+</head>
+
+
+  <body class="index">
+
+    <header class="navbar navbar-inverse navbar-fixed-top docs-nav" role="banner">
+  <div class="container">
+    <div class="navbar-header">
+      <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">=<b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a rel="nofollow" target="_blank" href="https://github.com/ipkn/giga/">Github</a></li>
+            <li><a rel="nofollow" href="/docs//reference">참고</a></li>
+            <li class="divider"></li>
+            <li><a rel="nofollow" target="_blank" href="https://github.com/luoyan35714/LessOrMore.git">theme</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+    <div class="docs-header" id="content">
+  <div class="container">
+  	
+	    <h1>Giga Editor</h1>
+        <p>VS Code running on terminal, or<BR>terminal based text editor (can) consuming <strong>GBs</strong> of memory</p>
+    
+  </div>
+</div>
+<BR>
+    
+
+     <div class="container docs-container">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="sidebar hidden-print" role="complementary">
+          </div>
+        </div>
+        <div class="col-md-9" role="main">
+          <div class="panel docs-content">
+            <div class="wrapper">
+                <BR>
+              <div class="home">
+<p>
+지금까지 
+emacs나 vim을 익히는 것을 최대한 미뤄오셨나요?<br>
+또, 터미널에서 파일을 편집할 일을 최대한 피해오셨나요?<br>
+</p>
+<p>
+이제는 더이상 그럴 필요가 없습니다.
+</p>
+<p>
+<a href="https://2018.stateofjs.com/other-tools/">44% 이상의 JavaScript 개발자가 선택</a>한 VS Code를,<br>
+바로 서버에 접속한 <strong>터미널 환경에서 사용</strong>할 수 있습니다!</P>
+<p>
+<strike>
+이제 서버에서도 electron 기반 에디터를 사용하며 CPU와 메모리를 낭비합시다!
+</strike>
+</p>
+<h3>
+    Giga Editor
+</h3>
+<img src="vscode1.png" width=380 height=219><br>
+    <p>
+기가 에디터는 VS Code를 고쳐 터미널에서 실행할 수 있게 한 에디터입니다.
+<pre>
+$ giga
+$ giga index.html
+</pre>
+코드와 마찬가지로 인자를 줘서 실행하여<br>
+당 파일을 편집하거나 특정 폴더를 워크스페이스로 지정하여 활용할 수 있습니다.
+</p>
+<h3>
+    기술적 자세한 내용
+</h3>
+
+<p>
+VS Code는 electron을 이용하여 작성되어 있습니다. <br>
+electron은 웹 기술로 작성된 프로그램을 Chromium 렌더러 + V8 을 통해 데스크탑 프로그램으로 실행할 수 있게 해줍니다.<br>
+리눅스 상에서는 Xwindow를 통해서 이런 프로그램을 실행하여 사용할 수 있습니다.
+</p>
+<p>
+Xvfb 라는 Xwindow가 있는데, 이걸 이용하면 리눅스 상의 GUI 프로그램을 headless로 실행할 수 있습니다. 화면에 그려지는 내용은 메모리 상으로만 저장하고, 실제로 보여주진 않습니다.
+<pre>
+$ xvfb-run code
+</pre>
+위와 같은 명령으로 GUI 프로그램을 실행할 수 있습니다.
+</p>
+<br>
+<p> 전체적인 과정을 정리하면 이렇겠군요.</p>
+<h6 style="color:rgb(180,180,180)">
+HTML을 통해 화면에 표현되는 정보들은 DOM을 통해 읽어올 수 있습니다. TreeWalker 객체를 통해 보이는 TextNode들을 모두 얻을 수 있고요.<br>
+해당 노드의 x위치, y위치나 css 상의 색 정보등을 getClientRects, getComputeStyle 등을 활용하여 얻어 옵니다. <br>
+해당 텍스트를 터미널에 맞춰 보여주기 위해, 화면 크기를 현재 터미널 크기 기준 가로*8 세로*16이 되게 설정합니다.<br>
+CSS를 이용해서 모든 폰트를 강제로 monospace 폰트로 변환하고, 글자 크기도 16pt로 맞춥니다. 브라우저가 다른 CSS 조건들에 맞게 알아서 렌더링을 해줍니다.<br>
+글자가 겹치는 경우는 그중 제일 위에 있는 것만 고릅니다. elementAtPoint 등을 활용합니다.<br>
+이 정보들을 터미널에 표시하는걸 담당하는 프로세스(giga)에 전송하고, 색을 맞춰서 터미널 상에 그려줍니다.<br>
+터미널에서 키나 마우스 입력을 하면 다시 브라우저에 전송해서 해당 위치의 DOM 객체에 KeyboardEvent와 MouseEvent를 생성해서 전달해줍니다.
+</h6>
+<br>
+<p>
+대충 이리저리 복잡한 과정을 거친단 뜻입니다.<BR>
+<pre>
+VS Code &rarr; electron &rarr; 폰트 강제 변환 &rarr; TextNode 모두 읽기 &rarr; 적절히 화면에 배치 &rarr; WebSocket &rarr; giga &rarr; 터미널
+</pre>
+</p>
+
+<p>
+개발에 대한 아이디어는 <a href="https://www.brow.sh">brow.sh</a>에서 많이 얻었습니다. 다만 firefox용으로 개발된 도구여서 관련 기능은 새로 개발해야 했습니다.
+</p>
+
+<br>
+<h3>
+    스크린샷
+</h3>
+
+<p>
+VS Code 처음 실행한 Welcome 화면. 일반 VS Code 화면과 비교해보세요.<br>
+<img src="vscode1.png"width=570 height=329>
+<img src="vscode0.png" width=505 height=380>
+</p>
+<br>
+<p>
+Syntax highlighting도 정상적으로 적용되는 모습.<br>
+<strike>기능</strike>이 너무 뛰어난 나머지 불필요한 빈줄이 생기는걸 확인할 수 있습니다.
+<img src="vscode2.png">
+</p>
+
+
+<br> <br> <br> <br> <br>.<br> <br> <br> <br>.<br> <br> <br>.<br> <br>.<br> <br>.<br>.<br>.<br>.<br> <br> <br> <br>
+<h3>
+    하지만..
+</h3>
+<p>
+BABA IS YOU 를 플레이하느라 개발시간 대부분을 날려먹어서 아직 완성이 안되었습니다.<br> 만우절이라고 완성했다고 거짓말 하기에도 너무 부족한.......상태......<br>
+<strike>그렇다고 BABA IS YOU 다 깨지도 못했어.. &#x1f99b; HAMA IS LAZY .. 너무 어려워..</strike>
+</p>
+<p>
+쓸만한 버전이 나오면 GitHub을 통해 공개됩니다. 정말 쓸모없겠지만 관심있으시면 기다려 주세요. :)<br>
+비슷한 기법을 활용하여 터미널용 Slack 등도 만들 수 있지 않을까 기대 중입니다.
+</p>
+
+
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+    <footer class="footer" role="contentinfo">
+	<div class="container">
+		<p class="copyright">Copyright &copy; 2014-2019 <a href=""><code>Jaeseung Ha</code></a>.</p>
+		<p>Powered by <a href="http://jekyllrb.com">Jekyll</a>, themed from <a href="http://lesscss.cn/">Less</a>, refactored by <a href="http://www.hifreud.com/">Freud Kang</a></p>
+	</div>
+</footer>
+
+<script src="styles/js/jquery.min.js"></script>
+<script src="styles/js/bootstrap.min.js"></script>
+<script src="styles/js/holder.min.js"></script>
+<script src="styles/js/lessismore.js"></script>
+<script src="styles/js/application.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  </body>
+</html>
